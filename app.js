@@ -34,7 +34,7 @@ passport.deserializeUser(function(id, done) {
 passport.use(new GitHubStrategy({
   clientID: auth.clientID,
   clientSecret: auth.clientSecret,
-  callbackURL: "http://ideasquare-co.herokuapp.com/auth/github/callback"
+  callbackURL: "https://ideasquare-co.herokuapp.com/auth/github/callback"
 },
 
   function(token, refreshToken, profile, done) {
