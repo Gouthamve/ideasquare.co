@@ -8,8 +8,9 @@ var passport = require('passport');
 var session = require('express-session');
 var flash    = require('connect-flash');
 var mongoose = require('mongoose');
+var db = require('./config/database.js');
 
-mongoose.connect("mongodb://localhost/test3");
+mongoose.connect(db.url);
 
 var routes = require('./routes/index');
 
