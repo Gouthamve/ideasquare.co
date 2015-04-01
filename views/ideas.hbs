@@ -1,7 +1,13 @@
 <h1>Ideas</h1>
 
 {{#each posts}}
-	<h2>{{title}}</h2>
-	<h3>{{description}}</h3>
-	<h4>Author: {{Author}}</h4>
+<div class="container">
+	<div class="cloumns">
+		<h2>{{title}}</h2>
+		<h3>{{description}}</h3>
+		<div class="one-third column">
+			<h4>By: {{Author}}</h4>
+		</div>
+	</div>
+</div>
 {{/each}}
