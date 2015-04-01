@@ -10,7 +10,7 @@ var flash    = require('connect-flash');
 var mongoose = require('mongoose');
 var db = require('./config/database.js');
 
-mongoose.connect(db.url);
+mongoose.connect("mongodb://localhost/test4");
 
 var routes = require('./routes/index');
 
@@ -34,7 +34,7 @@ passport.deserializeUser(function(id, done) {
 passport.use(new GitHubStrategy({
   clientID: auth.clientID,
   clientSecret: auth.clientSecret,
-  callbackURL: "https://ideasquare-co.herokuapp.com/auth/github/callback"
+  callbackURL: auth.callbackURL
 },
 
   function(token, refreshToken, profile, done) {
