@@ -1,12 +1,24 @@
-<h1>Ideas</h1>
-
-{{#each posts}}
 <div class="container">
+	<div class="columns">
+		<h1>Ideas</h1>
+		<a href="/issue"><h2>Submit Your Idea</h2></a>
+	</div>
 	<div class="cloumns">
 		<h2>{{title}}</h2>
 		<div class="one-third column">
 		</div>
 		<p>{{description}}</p>
+		{{#each posts}}
+			<a href="/upvote/{{_id}}"><div class="one-fifth column">
+				{{upvotes}}
+			</div></a>
+			<div class="four-fifths column">
+				<h2>{{title}}</h2>
+				<h3>{{description}}</h3>
+				<div class="one-third column">
+					<h4>By: {{Author}}</h4>
+				</div>
+			</div>
+		{{/each}}
 	</div>
 </div>
-{{/each}}
