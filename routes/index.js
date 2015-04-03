@@ -31,7 +31,8 @@ router.post('/', isLoggedIn, urlencodedParser, function(req,res) {
 		console.log(user);
 		var newPost = new Post({title: req.body.title,
 														description: req.body.description,
-														Author: user._id});
+														Author: user._id,
+														upvotes: 0});
 		newPost.save(function(err, post){
 			if (err)
 				console.log(err)
@@ -82,6 +83,23 @@ router.get('/ideas',function(req,res) {
   	}
 	});
  });
+
+
+
+router.get('/upvote/:id',function(req,res) { 
+	console.log(req.params.id);
+	Post.findById(req.params.id, function(err, post) {
+		if(err)
+			console.log(err)
+		else
+			post.update({$inc: {upvotes: 1}}, function(err){
+				if (err)
+					console.log(err)
+			});
+	})
+	res.redirect('/ideas');
+});
+
 
 function changePost(posts, i) {
 	User.findById(posts[i].Author, function(err, Author){
