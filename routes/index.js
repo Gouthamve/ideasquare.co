@@ -13,13 +13,13 @@ router.get('/login',function(req,res) {
 	res.render('login');
 });
 
-router.get('/issue', isLoggedIn, function(req, res, next) {
+router.get('/newIdea', isLoggedIn, function(req, res, next) {
   var sessId = req.sessionID;
   req.session.reload( function (err) {
 		var session = JSON.parse(req.sessionStore.sessions[sessId]);
 		console.log(session.passport);
 		req.session.save();
-  	res.render('issue');    
+  	res.render('newIdea');    
   });
 });
 
@@ -50,7 +50,7 @@ router.post('/', isLoggedIn, urlencodedParser, function(req,res) {
 		}, function(err, resp) {
 			if(err) {
 				console.log(err);
-				res.redirect('/issue');
+				res.redirect('/newIdea');
 			}
 			else
 				res.redirect('/');
@@ -62,8 +62,8 @@ router.get('/auth/github', passport.authenticate('github', {scope: ['user:email'
 
 router.get('/auth/github/callback', 
 	passport.authenticate('github', {
-    failureRedirect : '/',
-    successRedirect: '/issue'
+    failureRedirect : '/login',
+    successRedirect: '/newIdea'
   }));
 
 /* GET home page. */
@@ -86,7 +86,7 @@ router.get('/',function(req,res) {
 
 
 
-router.get('/upvote/:id',function(req,res) { 
+router.get('/upvote/:id', function(req,res) { 
 	console.log(req.params.id);
 	Post.findById(req.params.id, function(err, post) {
 		if(err)
