@@ -7,20 +7,19 @@ var urlencodedParser = bp.urlencoded({ extended: false });
 var Post = require("../models/post.js");
 var User = require("../models/user.js");
 
-/* GET home page. */
-router.get('/', function(req, res, next) {
+
+router.get('/login',function(req,res) {
 	req.session.save();
-  res.render('index');
+	res.render('login');
 });
 
-router.get('/issue', isLoggedIn, function(req, res, next) {
+router.get('/newIdea', isLoggedIn, function(req, res, next) {
   var sessId = req.sessionID;
-  console.log(sessId);
   req.session.reload( function (err) {
 		var session = JSON.parse(req.sessionStore.sessions[sessId]);
 		console.log(session.passport);
 		req.session.save();
-  	res.render('issue');    
+  	res.render('newIdea');    
   });
 });
 
@@ -51,10 +50,10 @@ router.post('/', isLoggedIn, urlencodedParser, function(req,res) {
 		}, function(err, resp) {
 			if(err) {
 				console.log(err);
-				res.redirect('/issue');
+				res.redirect('/newIdea');
 			}
 			else
-				res.redirect('/ideas');
+				res.redirect('/');
 		}); //issue
   });
 });
@@ -63,11 +62,12 @@ router.get('/auth/github', passport.authenticate('github', {scope: ['user:email'
 
 router.get('/auth/github/callback', 
 	passport.authenticate('github', {
-    failureRedirect : '/',
-    successRedirect: '/issue'
+    failureRedirect : '/login',
+    successRedirect: '/newIdea'
   }));
 
-router.get('/ideas',function(req,res) { 
+/* GET home page. */
+router.get('/',function(req,res) {
 	Post.find(function(err, posts){
 		if(err) {
 			console.log(err);
@@ -79,14 +79,14 @@ router.get('/ideas',function(req,res) {
 				changePost(posts, i);
 			}
 			User.findById(posts[0])
-  		res.render('ideas', {posts: posts});
+  		res.render('index', {posts: posts});
   	}
 	});
  });
 
 
 
-router.get('/upvote/:id',function(req,res) { 
+router.get('/upvote/:id', function(req,res) { 
 	console.log(req.params.id);
 	Post.findById(req.params.id, function(err, post) {
 		if(err)
@@ -97,7 +97,7 @@ router.get('/upvote/:id',function(req,res) {
 					console.log(err)
 			});
 	})
-	res.redirect('/ideas');
+	res.redirect('/');
 });
 
 
@@ -112,10 +112,10 @@ function isLoggedIn(req, res, next) {
 		// if user is authenticated in the session, carry on
 	  var sessId = req.sessionID;
 	  var sessions = req.sessionStore.sessions; 
-	  if (sessions[sessId])
+	  if (JSON.parse(sessions[sessId]).passport.user)
 	    return next();
 	  // if they aren't redirect them to the home page
-  	res.redirect('/');
+  	res.redirect('/login');
   });  
 };
 
